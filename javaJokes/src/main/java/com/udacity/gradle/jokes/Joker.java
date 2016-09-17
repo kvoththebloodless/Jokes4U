@@ -1,32 +1,38 @@
 package com.udacity.gradle.jokes;
+
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Random;
-public class Joker {
-    public String jokeWanted()
-    {
-        Scanner sc=null;
-        int i=0;
-        String joke="joke's on you";
-        int jokeno=new Random().nextInt(72);
-        System.out.println(jokeno);
-        try {
-            sc= new Scanner(new File("jokes"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        while(sc!=null&&sc.hasNextLine() && i!=jokeno)
-        {
-          i++;
-            sc.nextLine();
-        }
-        try {
-            joke = sc.nextLine();
-        }
-        catch(Exception e)
-        {}
-       return joke;
-    }
+import java.net.*;
+import java.io.*;
 
+public class Joker {
+
+
+    public static String jokeWanted() {
+        String joke;
+        URL oracle;
+        try {
+            oracle = new URL("http://tambal.azurewebsites.net/joke/random");
+            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+            String inputLine;
+            StringBuilder sb = new StringBuilder();
+            while ((inputLine = in.readLine()) != null)
+                sb.append(inputLine);
+            JSONObject json = new JSONObject(sb.toString());
+            joke = json.getString("joke");
+            System.out.print(joke);
+            in.close();
+
+        } catch (Exception e) {
+            joke = "What's down and isn't working? the joke api from where jokes are being fetched. sorry";
+        }
+        return joke;
+    }
 }
+
+
+

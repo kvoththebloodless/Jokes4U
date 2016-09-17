@@ -11,6 +11,21 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+task engineOnLocal {
+    project(":backend").afterEvaluate { backend ->
+        backend.extensions.appengine.daemon = true
+    }
+    dependsOn ":backend:appengineRun"
+
+}
+task testLocal {
+    dependsOn ":app:connectedCheck"
+    mustRunAfter "engineOnLocal"
+}
+task startTestStop {
+    dependsOn = ["engineOnLocal", "testLocal"]
+    finalizedBy ":backend:appengineStop"
+}
 
 allprojects {
     repositories {

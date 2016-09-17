@@ -11,19 +11,46 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        dexOptions {
+            incremental true
+            javaMaxHeapSize '4g'
+        }
+        defaultConfig {
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
+    productFlavors {
+        paid {
 
+            applicationId "com.example.udacity.builditbigger.paid"
+
+        }
+        free {
+            applicationId "com.example.udacity.builditbigger.free"
+        }
+
+    }
+
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile project(":javaJokes")
     // Added for AdMob
-    compile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile project(path: ':jokesdisplay')
+    freeCompile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile project(path: ':backend', configuration: 'android-endpoints')
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
 }
